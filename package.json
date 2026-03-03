@@ -1,0 +1,30 @@
+{
+  "name": "vault-mind",
+  "version": "0.1.0",
+  "description": "Local AI-powered semantic search for Obsidian. Your notes never leave your machine.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "lint": "tsc --noEmit --skipLibCheck",
+    "clean": "rm -rf main.js"
+  },
+  "keywords": [
+    "obsidian",
+    "obsidian-plugin",
+    "semantic-search",
+    "ai",
+    "ollama",
+    "embeddings",
+    "local-ai"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.19.0",
+    "obsidian": "latest",
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.0"
+  }
+}

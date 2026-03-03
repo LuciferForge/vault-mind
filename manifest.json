@@ -1,0 +1,11 @@
+{
+  "id": "vault-mind",
+  "name": "Vault Mind",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Local AI-powered semantic search for your vault. Your notes never leave your machine.",
+  "author": "LuciferForge",
+  "authorUrl": "https://github.com/LuciferForge",
+  "fundingUrl": "https://github.com/LuciferForge/vault-mind",
+  "isDesktopOnly": true
+}
