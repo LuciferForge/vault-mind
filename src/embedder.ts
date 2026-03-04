@@ -6,6 +6,7 @@
  * This module is intentionally stateless; callers manage model/endpoint config.
  */
 
+import { requestUrl } from "obsidian";
 import { OllamaEmbeddingResponse } from "./types";
 
 export class OllamaEmbedder {
@@ -32,46 +33,36 @@ export class OllamaEmbedder {
   async embed(text: string): Promise<Float32Array> {
     const url = `${this.endpoint}/api/embeddings`;
 
-    let response: Response;
+    let data: OllamaEmbeddingResponse;
     try {
-      response = await fetch(url, {
+      const resp = await requestUrl({
+        url,
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        contentType: "application/json",
         body: JSON.stringify({
           model: this.model,
           prompt: text,
         }),
+        throw: false,
       });
+
+      if (resp.status !== 200) {
+        throw new Error(
+          `Ollama returned HTTP ${resp.status} for model "${this.model}". ` +
+          `Is the model downloaded? Run: \`ollama pull ${this.model}\`. ` +
+          `Response: ${resp.text}`
+        );
+      }
+
+      data = resp.json as OllamaEmbeddingResponse;
     } catch (e: unknown) {
-      // Network-level failure — Ollama not running, wrong port, etc.
       const msg = e instanceof Error ? e.message : String(e);
+      if (msg.includes("HTTP")) throw e as Error;
       throw new Error(
         `Cannot reach Ollama at ${this.endpoint}. ` +
         `Make sure Ollama is running: \`ollama serve\`. ` +
         `Original error: ${msg}`
       );
-    }
-
-    if (!response.ok) {
-      let body = "";
-      try {
-        body = await response.text();
-      } catch {
-        // ignore — best effort
-      }
-      throw new Error(
-        `Ollama returned HTTP ${response.status} for model "${this.model}". ` +
-        `Is the model downloaded? Run: \`ollama pull ${this.model}\`. ` +
-        `Response: ${body}`
-      );
-    }
-
-    let data: OllamaEmbeddingResponse;
-    try {
-      data = await response.json() as OllamaEmbeddingResponse;
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      throw new Error(`Ollama returned malformed JSON: ${msg}`);
     }
 
     if (!data.embedding || !Array.isArray(data.embedding)) {
@@ -92,12 +83,12 @@ export class OllamaEmbedder {
     try {
       // Check if Ollama is up
       const tagsUrl = `${this.endpoint}/api/tags`;
-      const tagsResp = await fetch(tagsUrl);
-      if (!tagsResp.ok) {
+      const tagsResp = await requestUrl({ url: tagsUrl, throw: false });
+      if (tagsResp.status !== 200) {
         return { ok: false, reason: `Ollama server returned HTTP ${tagsResp.status}` };
       }
 
-      const tagsData = await tagsResp.json() as { models?: Array<{ name: string }> };
+      const tagsData = tagsResp.json as { models?: Array<{ name: string }> };
       const models = tagsData.models ?? [];
       const modelNames = models.map((m) => m.name);
 

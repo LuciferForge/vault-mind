@@ -206,7 +206,7 @@ export class Indexer {
       .replace(/^---[\s\S]*?---\n/, "") // strip YAML frontmatter
       .replace(/!\[.*?\]\(.*?\)/g, "")  // strip image embeds
       .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, "$1") // [[link|alias]] → link text
-      .replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1") // [text](url) → text
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // [text](url) → text
       .replace(/#{1,6}\s/g, "")          // strip heading markers
       .replace(/[*_`~]/g, "")            // strip bold/italic/code markers
       .replace(/\n{3,}/g, "\n\n")        // collapse excessive blank lines

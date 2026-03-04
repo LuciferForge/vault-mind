@@ -21,13 +21,13 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Vault Mind Settings" });
+    new Setting(containerEl).setName("Vault Mind settings").setHeading();
 
-    // --- Ollama Connection ---
-    containerEl.createEl("h3", { text: "Ollama Connection" });
+    // --- Ollama connection ---
+    new Setting(containerEl).setName("Ollama connection").setHeading();
 
     new Setting(containerEl)
-      .setName("Ollama endpoint")
+      .setName("Ollama endpoint URL")
       .setDesc(
         "URL of your local Ollama server. Default: http://localhost:11434. " +
         "Change this only if you run Ollama on a custom port or remote host."
@@ -43,7 +43,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Embedding model")
+      .setName("Embedding model name")
       .setDesc(
         "Ollama model to use for embeddings. Recommended: nomic-embed-text (768 dims, fast). " +
         "You must run `ollama pull <model>` before use."
@@ -61,7 +61,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     // Connection test button
     let testResultEl: HTMLElement;
     const testSetting = new Setting(containerEl)
-      .setName("Test connection")
+      .setName("Test connection status")
       .setDesc("Verify Ollama is running and the embedding model is available.");
 
     testResultEl = testSetting.settingEl.createDiv({ cls: "vault-mind-test-result" });
@@ -99,11 +99,11 @@ export class VaultMindSettingsTab extends PluginSettingTab {
         })
     );
 
-    // --- Search Behavior ---
-    containerEl.createEl("h3", { text: "Search Behavior" });
+    // --- Search behavior ---
+    new Setting(containerEl).setName("Search behavior").setHeading();
 
     new Setting(containerEl)
-      .setName("Max results")
+      .setName("Maximum results")
       .setDesc("Number of results to show per search query. Range: 1–50.")
       .addSlider((slider) =>
         slider
@@ -117,10 +117,10 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     // --- Indexing ---
-    containerEl.createEl("h3", { text: "Indexing" });
+    new Setting(containerEl).setName("Indexing").setHeading();
 
     new Setting(containerEl)
-      .setName("Auto-index on startup")
+      .setName("Auto-index on startup toggle")
       .setDesc(
         "When enabled, Vault Mind will check for changed notes and update the index " +
         "every time Obsidian loads. Only changed files are re-embedded (incremental)."
@@ -135,7 +135,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Indexing batch size")
+      .setName("Indexing batch size value")
       .setDesc(
         "Files to embed per batch before yielding the UI thread. " +
         "Lower = smoother UI during indexing. Higher = faster overall. Default: 10."
@@ -153,7 +153,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
 
     // Full re-index button
     new Setting(containerEl)
-      .setName("Re-index entire vault")
+      .setName("Re-index entire vault action")
       .setDesc(
         "Wipe the existing index and re-embed all notes from scratch. " +
         "Use this if you change the embedding model or suspect index corruption. " +
@@ -176,7 +176,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     // --- Info ---
-    containerEl.createEl("h3", { text: "About" });
+    new Setting(containerEl).setName("About").setHeading();
     const info = containerEl.createDiv({ cls: "vault-mind-about" });
     info.createEl("p", {
       text:

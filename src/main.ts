@@ -45,7 +45,7 @@ export default class VaultMindPlugin extends Plugin {
   // ---------------------------------------------------------------------------
 
   async onload(): Promise<void> {
-    console.log("[VaultMind] Loading plugin");
+    console.debug("[VaultMind] Loading plugin");
 
     // 1. Load user settings
     await this.loadSettings();
@@ -86,7 +86,7 @@ export default class VaultMindPlugin extends Plugin {
 
     // 5. Commands
     this.addCommand({
-      id: "open-vault-mind",
+      id: "open-search",
       name: "Open semantic search",
       callback: async () => {
         await this.activateView();
@@ -161,11 +161,11 @@ export default class VaultMindPlugin extends Plugin {
       });
     }
 
-    console.log("[VaultMind] Plugin loaded");
+    console.debug("[VaultMind] Plugin loaded");
   }
 
-  async onunload(): Promise<void> {
-    console.log("[VaultMind] Unloading plugin");
+  onunload(): void {
+    console.debug("[VaultMind] Unloading plugin");
     this.indexer.abort();
 
     // Clear any pending file update timers
@@ -289,19 +289,21 @@ export default class VaultMindPlugin extends Plugin {
     const existing = this.fileUpdateTimers.get(file.path);
     if (existing) clearTimeout(existing);
 
-    const timer = setTimeout(async () => {
+    const timer = setTimeout(() => {
       this.fileUpdateTimers.delete(file.path);
-      try {
-        await this.indexer.indexFile(file);
-        this.scheduleStoreSave();
+      void (async () => {
+        try {
+          await this.indexer.indexFile(file);
+          this.scheduleStoreSave();
 
-        const view = this.getActiveView();
-        if (view) await view.onFileIndexed();
-      } catch (e: unknown) {
-        // Non-fatal — Ollama may be down. Don't spam the user.
-        const msg = e instanceof Error ? e.message : String(e);
-        console.warn(`[VaultMind] Failed to index "${file.path}": ${msg}`);
-      }
+          const view = this.getActiveView();
+          if (view) view.onFileIndexed();
+        } catch (e: unknown) {
+          // Non-fatal — Ollama may be down. Don't spam the user.
+          const msg = e instanceof Error ? e.message : String(e);
+          console.warn(`[VaultMind] Failed to index "${file.path}": ${msg}`);
+        }
+      })();
     }, this.FILE_UPDATE_DEBOUNCE_MS);
 
     this.fileUpdateTimers.set(file.path, timer);
@@ -311,14 +313,12 @@ export default class VaultMindPlugin extends Plugin {
   private storeSaveTimer: ReturnType<typeof setTimeout> | null = null;
   private scheduleStoreSave(): void {
     if (this.storeSaveTimer) clearTimeout(this.storeSaveTimer);
-    this.storeSaveTimer = setTimeout(async () => {
+    this.storeSaveTimer = setTimeout(() => {
       this.storeSaveTimer = null;
-      try {
-        await this.store.save();
-      } catch (e: unknown) {
+      void this.store.save().catch((e: unknown) => {
         const msg = e instanceof Error ? e.message : String(e);
         console.error(`[VaultMind] Failed to save index: ${msg}`);
-      }
+      });
     }, 5000); // 5s after last incremental update
   }
 }

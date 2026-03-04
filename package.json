@@ -1,6 +1,6 @@
 {
   "name": "vault-mind",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local AI-powered semantic search for Obsidian. Your notes never leave your machine.",
   "main": "main.js",
   "scripts": {

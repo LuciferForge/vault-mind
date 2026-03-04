@@ -57,11 +57,13 @@ export class VaultMindView extends ItemView {
     return "brain-circuit";
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async onOpen(): Promise<void> {
     this.settings = this.getSettings();
     this.buildUI();
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async onClose(): Promise<void> {
     this.indexer.abort();
   }
@@ -78,7 +80,7 @@ export class VaultMindView extends ItemView {
   }
 
   /** Called from main.ts during incremental file changes */
-  async onFileIndexed(): Promise<void> {
+  onFileIndexed(): void {
     this.setStatus(`${this.store.noteCount} notes indexed`);
   }
 
@@ -101,7 +103,7 @@ export class VaultMindView extends ItemView {
       cls: "vault-mind-index-btn",
       attr: { "aria-label": "Re-index vault" },
     });
-    this.indexBtn.addEventListener("click", () => this.triggerIndex(false));
+    this.indexBtn.addEventListener("click", () => void this.triggerIndex(false));
 
     // --- Search input ---
     const searchWrap = container.createDiv({ cls: "vault-mind-search-wrap" });
@@ -140,7 +142,7 @@ export class VaultMindView extends ItemView {
     if (this.searchDebounceTimer) {
       clearTimeout(this.searchDebounceTimer);
     }
-    this.searchDebounceTimer = setTimeout(() => this.runSearch(), 300);
+    this.searchDebounceTimer = setTimeout(() => void this.runSearch(), 300);
   }
 
   private async runSearch(): Promise<void> {
@@ -207,15 +209,15 @@ export class VaultMindView extends ItemView {
       this.renderHighlightedSnippet(snippetEl, result.snippet, query);
 
       // Click handler — open the note
-      item.addEventListener("click", async () => {
-        await this.openNote(result.path);
+      item.addEventListener("click", () => {
+        void this.openNote(result.path);
       });
 
       // Keyboard accessibility
       item.setAttribute("tabindex", "0");
-      item.addEventListener("keydown", async (e: KeyboardEvent) => {
+      item.addEventListener("keydown", (e: KeyboardEvent) => {
         if (e.key === "Enter" || e.key === " ") {
-          await this.openNote(result.path);
+          void this.openNote(result.path);
         }
       });
 
