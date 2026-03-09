@@ -21,13 +21,13 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName("Vault Mind settings").setHeading();
+    new Setting(containerEl).setName("General").setHeading();
 
     // --- Ollama connection ---
     new Setting(containerEl).setName("Ollama connection").setHeading();
 
     new Setting(containerEl)
-      .setName("Ollama endpoint URL")
+      .setName("Ollama endpoint")
       .setDesc(
         "URL of your local Ollama server. Default: http://localhost:11434. " +
         "Change this only if you run Ollama on a custom port or remote host."
@@ -43,7 +43,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Embedding model name")
+      .setName("Embedding model")
       .setDesc(
         "Ollama model to use for embeddings. Recommended: nomic-embed-text (768 dims, fast). " +
         "You must run `ollama pull <model>` before use."
@@ -61,7 +61,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     // Connection test button
     let testResultEl: HTMLElement;
     const testSetting = new Setting(containerEl)
-      .setName("Test connection status")
+      .setName("Test connection")
       .setDesc("Verify Ollama is running and the embedding model is available.");
 
     testResultEl = testSetting.settingEl.createDiv({ cls: "vault-mind-test-result" });
@@ -120,7 +120,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     new Setting(containerEl).setName("Indexing").setHeading();
 
     new Setting(containerEl)
-      .setName("Auto-index on startup toggle")
+      .setName("Auto-index on startup")
       .setDesc(
         "When enabled, Vault Mind will check for changed notes and update the index " +
         "every time Obsidian loads. Only changed files are re-embedded (incremental)."
@@ -135,7 +135,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Indexing batch size value")
+      .setName("Batch size")
       .setDesc(
         "Files to embed per batch before yielding the UI thread. " +
         "Lower = smoother UI during indexing. Higher = faster overall. Default: 10."
@@ -153,7 +153,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
 
     // Full re-index button
     new Setting(containerEl)
-      .setName("Re-index entire vault action")
+      .setName("Re-index entire vault")
       .setDesc(
         "Wipe the existing index and re-embed all notes from scratch. " +
         "Use this if you change the embedding model or suspect index corruption. " +
@@ -161,7 +161,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
       )
       .addButton((btn: ButtonComponent) =>
         btn
-          .setButtonText("Re-index Now")
+          .setButtonText("Re-index now")
           .setWarning()
           .onClick(async () => {
             btn.setDisabled(true);
@@ -170,7 +170,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
               await this.plugin.triggerFullReindex();
             } finally {
               btn.setDisabled(false);
-              btn.setButtonText("Re-index Now");
+              btn.setButtonText("Re-index now");
             }
           })
       );

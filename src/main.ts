@@ -80,7 +80,7 @@ export default class VaultMindPlugin extends Plugin {
     });
 
     // 4. Ribbon icon — opens the search panel
-    this.addRibbonIcon("brain-circuit", "Vault Mind: Semantic Search", async () => {
+    this.addRibbonIcon("brain-circuit", "Vault Mind: semantic search", async () => {
       await this.activateView();
     });
 
@@ -255,7 +255,7 @@ export default class VaultMindPlugin extends Plugin {
     const existing = workspace.getLeavesOfType(VIEW_TYPE_VAULT_MIND);
 
     if (existing.length > 0) {
-      workspace.revealLeaf(existing[0]);
+      void workspace.revealLeaf(existing[0]);
       return;
     }
 
@@ -265,12 +265,12 @@ export default class VaultMindPlugin extends Plugin {
       // Fallback: open as floating leaf
       const newLeaf = workspace.getLeaf("tab");
       await newLeaf.setViewState({ type: VIEW_TYPE_VAULT_MIND, active: true });
-      workspace.revealLeaf(newLeaf);
+      void workspace.revealLeaf(newLeaf);
       return;
     }
 
     await leaf.setViewState({ type: VIEW_TYPE_VAULT_MIND, active: true });
-    workspace.revealLeaf(leaf);
+    void workspace.revealLeaf(leaf);
   }
 
   private getActiveView(): VaultMindView | null {

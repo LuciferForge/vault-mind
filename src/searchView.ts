@@ -57,13 +57,13 @@ export class VaultMindView extends ItemView {
     return "brain-circuit";
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // eslint-disable-next-line @typescript-eslint/require-await -- Obsidian requires onOpen to return Promise<void> but this implementation is synchronous
   async onOpen(): Promise<void> {
     this.settings = this.getSettings();
     this.buildUI();
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // eslint-disable-next-line @typescript-eslint/require-await -- Obsidian requires onClose to return Promise<void> but this implementation is synchronous
   async onClose(): Promise<void> {
     this.indexer.abort();
   }
