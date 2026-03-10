@@ -50,7 +50,7 @@ export class VaultMindView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Vault Mind";
+    return "Vault mind";
   }
 
   getIcon(): string {
@@ -95,7 +95,7 @@ export class VaultMindView extends ItemView {
 
     // --- Header ---
     const header = container.createDiv({ cls: "vault-mind-header" });
-    header.createEl("span", { text: "Vault Mind", cls: "vault-mind-title" });
+    header.createEl("span", { text: "Vault mind", cls: "vault-mind-title" });
 
     // Index button
     this.indexBtn = header.createEl("button", {

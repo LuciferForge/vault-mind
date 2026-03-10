@@ -45,7 +45,7 @@ export default class VaultMindPlugin extends Plugin {
   // ---------------------------------------------------------------------------
 
   async onload(): Promise<void> {
-    console.debug("[VaultMind] Loading plugin");
+    console.debug("[Vault mind] Loading plugin");
 
     // 1. Load user settings
     await this.loadSettings();
@@ -80,7 +80,7 @@ export default class VaultMindPlugin extends Plugin {
     });
 
     // 4. Ribbon icon — opens the search panel
-    this.addRibbonIcon("brain-circuit", "Vault Mind: semantic search", async () => {
+    this.addRibbonIcon("brain-circuit", "Vault mind: Semantic search", async () => {
       await this.activateView();
     });
 
@@ -155,17 +155,17 @@ export default class VaultMindPlugin extends Plugin {
         setTimeout(() => {
           this.triggerIncrementalIndex().catch((e: unknown) => {
             const msg = e instanceof Error ? e.message : String(e);
-            console.error(`[VaultMind] Auto-index failed: ${msg}`);
+            console.error(`[Vault mind] Auto-index failed: ${msg}`);
           });
         }, 2000); // 2s grace period for vault to finish loading
       });
     }
 
-    console.debug("[VaultMind] Plugin loaded");
+    console.debug("[Vault mind] Plugin loaded");
   }
 
   onunload(): void {
-    console.debug("[VaultMind] Unloading plugin");
+    console.debug("[Vault mind] Unloading plugin");
     this.indexer.abort();
 
     // Clear any pending file update timers
@@ -189,13 +189,13 @@ export default class VaultMindPlugin extends Plugin {
       await view.triggerIndex(true);
     } else {
       // No view open — run headlessly with Notice feedback
-      new Notice("[VaultMind] Starting full re-index...");
+      new Notice("[Vault mind] Starting full re-index...");
       try {
         await this.indexer.indexVault(() => {}, true);
-        new Notice(`[VaultMind] Done. ${this.store.noteCount} notes indexed.`);
+        new Notice(`[Vault mind] Done. ${this.store.noteCount} notes indexed.`);
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
-        new Notice(`[VaultMind] Re-index failed: ${msg}`, 8000);
+        new Notice(`[Vault mind] Re-index failed: ${msg}`, 8000);
       }
     }
   }
@@ -211,7 +211,7 @@ export default class VaultMindPlugin extends Plugin {
         if (view2) view2.refreshSettings();
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
-        console.error(`[VaultMind] Incremental index failed: ${msg}`);
+        console.error(`[Vault mind] Incremental index failed: ${msg}`);
       }
     }
   }
@@ -301,7 +301,7 @@ export default class VaultMindPlugin extends Plugin {
         } catch (e: unknown) {
           // Non-fatal — Ollama may be down. Don't spam the user.
           const msg = e instanceof Error ? e.message : String(e);
-          console.warn(`[VaultMind] Failed to index "${file.path}": ${msg}`);
+          console.warn(`[Vault mind] Failed to index "${file.path}": ${msg}`);
         }
       })();
     }, this.FILE_UPDATE_DEBOUNCE_MS);
@@ -317,7 +317,7 @@ export default class VaultMindPlugin extends Plugin {
       this.storeSaveTimer = null;
       void this.store.save().catch((e: unknown) => {
         const msg = e instanceof Error ? e.message : String(e);
-        console.error(`[VaultMind] Failed to save index: ${msg}`);
+        console.error(`[Vault mind] Failed to save index: ${msg}`);
       });
     }, 5000); // 5s after last incremental update
   }

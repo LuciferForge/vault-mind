@@ -21,8 +21,6 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName("General").setHeading();
-
     // --- Ollama connection ---
     new Setting(containerEl).setName("Ollama connection").setHeading();
 
@@ -122,7 +120,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Auto-index on startup")
       .setDesc(
-        "When enabled, Vault Mind will check for changed notes and update the index " +
+        "When enabled, Vault mind will check for changed notes and update the index " +
         "every time Obsidian loads. Only changed files are re-embedded (incremental)."
       )
       .addToggle((toggle) =>
@@ -180,7 +178,7 @@ export class VaultMindSettingsTab extends PluginSettingTab {
     const info = containerEl.createDiv({ cls: "vault-mind-about" });
     info.createEl("p", {
       text:
-        "Vault Mind uses local AI embeddings to enable semantic search across your vault. " +
+        "Vault mind uses local AI embeddings to enable semantic search across your vault. " +
         "Your notes never leave your machine.",
     });
     info.createEl("p", {
