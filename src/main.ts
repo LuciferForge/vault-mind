@@ -80,7 +80,7 @@ export default class VaultMindPlugin extends Plugin {
     });
 
     // 4. Ribbon icon — opens the search panel
-    this.addRibbonIcon("brain-circuit", "Vault mind: semantic search", async () => {
+    this.addRibbonIcon("brain-circuit", "Vault mind: Semantic search", async () => {
       await this.activateView();
     });
 
@@ -189,7 +189,7 @@ export default class VaultMindPlugin extends Plugin {
       await view.triggerIndex(true);
     } else {
       // No view open — run headlessly with Notice feedback
-      new Notice("[Vault mind] starting full re-index...");
+      new Notice("[Vault mind] Starting full re-index...");
       try {
         await this.indexer.indexVault(() => {}, true);
         new Notice(`[Vault mind] Done. ${this.store.noteCount} notes indexed.`);
